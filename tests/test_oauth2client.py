@@ -215,7 +215,7 @@ class GoogleCredentialsTests(unittest.TestCase):
                            autospec=True) as open:
       self.assertEqual('GCE_PRODUCTION', _get_environment())
       open.assert_called_once_with(
-        urllib.request.OpenerDirector(), 'http://169.254.169.254/', timeout=1)
+        urllib.request.build_opener(urllib.request.ProxyHandler({})), 'http://169.254.169.254/', timeout=1)
 
   def test_get_environment_unknown(self):
     os.environ['SERVER_SOFTWARE'] = ''
@@ -224,7 +224,7 @@ class GoogleCredentialsTests(unittest.TestCase):
                            autospec=True) as open:
       self.assertEqual(DEFAULT_ENV_NAME, _get_environment())
       open.assert_called_once_with(
-        urllib.request.OpenerDirector(), 'http://169.254.169.254/', timeout=1)
+        urllib.request.build_opener(urllib.request.ProxyHandler({})), 'http://169.254.169.254/', timeout=1)
 
   def test_get_environment_variable_file(self):
     environment_variable_file = datafile(
