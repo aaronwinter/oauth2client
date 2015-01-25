@@ -210,7 +210,7 @@ class GoogleCredentialsTests(unittest.TestCase):
   def test_get_environment_gce_production(self):
     os.environ['SERVER_SOFTWARE'] = ''
     response = MockResponse({'Metadata-Flavor': 'Google'})
-    with mock.patch.object(urllib.request.OpenerDirector, 'open',
+    with mock.patch.object(urllib.request.build_opener(urllib.request.ProxyHandler({})), 'open',
                            return_value=response,
                            autospec=True) as open:
       self.assertEqual('GCE_PRODUCTION', _get_environment())
@@ -219,7 +219,10 @@ class GoogleCredentialsTests(unittest.TestCase):
 
   def test_get_environment_unknown(self):
     os.environ['SERVER_SOFTWARE'] = ''
-    with mock.patch.object(urllib.request.OpenerDirector, 'open',
+    proxy_handler = urllib.request.ProxyHandler({})
+    build_opener  = urllib.request.build_opener()
+    no_proxy_conf = build_opener(proxy_handler)
+    with mock.patch.object(urllib.request.build_opener(urllib.request.ProxyHandler({})), 'open',
                            return_value=response,
                            autospec=True) as open:
       self.assertEqual(DEFAULT_ENV_NAME, _get_environment())
