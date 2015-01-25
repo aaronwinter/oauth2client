@@ -219,9 +219,6 @@ class GoogleCredentialsTests(unittest.TestCase):
 
   def test_get_environment_unknown(self):
     os.environ['SERVER_SOFTWARE'] = ''
-    proxy_handler = urllib.request.ProxyHandler({})
-    build_opener  = urllib.request.build_opener()
-    no_proxy_conf = build_opener(proxy_handler)
     with mock.patch.object(urllib.request.build_opener(urllib.request.ProxyHandler({})), 'open',
                            return_value=response,
                            autospec=True) as open:
