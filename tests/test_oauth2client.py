@@ -220,7 +220,7 @@ class GoogleCredentialsTests(unittest.TestCase):
   def test_get_environment_unknown(self):
     os.environ['SERVER_SOFTWARE'] = ''
     no_proxy_conf = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-    with mock.patch.object(urllib.request.OpenDirector, 'open',
+    with mock.patch.object(urllib.request.OpenerDirector, 'open',
                            return_value=MockResponse({}),
                            autospec=True) as open:
       self.assertEqual(DEFAULT_ENV_NAME, _get_environment())
