@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/google/oauth2client.svg?branch=master)](https://travis-ci.org/google/oauth2client)
+[![Build Status](https://travis-ci.org/aaronwinter/oauth2client.svg?branch=test-patch-1)](https://travis-ci.org/aaronwinter/oauth2client)
 
 [![Coverage Status](https://img.shields.io/coveralls/google/oauth2client.svg)](https://coveralls.io/r/google/oauth2client?branch=master)
 
