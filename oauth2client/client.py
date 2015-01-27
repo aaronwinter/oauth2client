@@ -937,8 +937,8 @@ def _detect_gce_environment(urlopen=None):
   # could lead to false negatives in the event that we are on GCE, but
   # the metadata resolution was particularly slow. The latter case is
   # "unlikely".
+  no_proxy_conf = urllib.request.build_opener(urllib.request.ProxyHandler({}))
   try:
-    no_proxy_conf = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     response = no_proxy_conf.open('http://169.254.169.254/', timeout=1)
     return response.info().get('Metadata-Flavor', '') == 'Google'
   except socket.timeout:
