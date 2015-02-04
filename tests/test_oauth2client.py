@@ -215,7 +215,7 @@ class GoogleCredentialsTests(unittest.TestCase):
                            return_value=response,
                            autospec=True) as no_proxy_open:
       self.assertEqual('GCE_PRODUCTION', _get_environment())
-      no_proxy_open.assert_called_once_with(no_proxy_conf, 'http://169.254.169.254/', timeout=1)
+      no_proxy_open.assert_called_once_with('http://169.254.169.254/', timeout=1)
 
   def test_get_environment_unknown(self):
     os.environ['SERVER_SOFTWARE'] = ''
@@ -224,7 +224,7 @@ class GoogleCredentialsTests(unittest.TestCase):
                            return_value=MockResponse({}),
                            autospec=True) as no_proxy_open:
       self.assertEqual(DEFAULT_ENV_NAME, _get_environment())
-      no_proxy_open.assert_called_once_with(no_proxy_conf, 'http://169.254.169.254/', timeout=1)
+      no_proxy_open.assert_called_once_with('http://169.254.169.254/', timeout=1)
 
   def test_get_environment_variable_file(self):
     environment_variable_file = datafile(
