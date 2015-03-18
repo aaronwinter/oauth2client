@@ -213,9 +213,9 @@ class GoogleCredentialsTests(unittest.TestCase):
     response = MockResponse({'Metadata-Flavor': 'Google'})
     with mock.patch.object(no_proxy_conf, 'open',
                            return_value=response,
-                           autospec=True) as open:
+                           autospec=True) as no_proxy_conf_open:
       self.assertEqual('GCE_PRODUCTION', _get_environment())
-      no_proxy_conf.open.assert_called_once_with(
+      no_proxy_conf_open.assert_called_once_with(
           'http://169.254.169.254/', timeout=1)
 
   def test_get_environment_unknown(self):
@@ -223,9 +223,9 @@ class GoogleCredentialsTests(unittest.TestCase):
     no_proxy_conf = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     with mock.patch.object(no_proxy_conf, 'open',
                            return_value=MockResponse({}),
-                           autospec=True) as open:
+                           autospec=True) as no_proxy_conf_open:
       self.assertEqual(DEFAULT_ENV_NAME, _get_environment())
-      no_proxy_conf.open.assert_called_once_with(
+      no_proxy_conf_open.assert_called_once_with(
           'http://169.254.169.254/', timeout=1)
 
   def test_get_environment_variable_file(self):
