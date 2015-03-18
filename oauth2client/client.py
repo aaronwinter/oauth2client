@@ -92,6 +92,10 @@ AccessTokenInfo = collections.namedtuple(
     'AccessTokenInfo', ['access_token', 'expires_in'])
 
 DEFAULT_ENV_NAME = 'UNKNOWN'
+
+# If set to True _get_environment avoid GCE check (_detect_gce_environment)
+NO_GCE_CHECK = os.environ.setdefault('NO_GCE_CHECK', 'False')
+
 class SETTINGS(object):
   """Settings namespace for globally defined values."""
   env_name = None
@@ -807,16 +811,16 @@ class OAuth2Credentials(Credentials):
       raise AccessTokenRefreshError(error_msg)
 
   def _revoke(self, http_request):
-    """Revokes the refresh_token and deletes the store if available.
+    """Revokes this credential and deletes the stored copy (if it exists).
 
     Args:
       http_request: callable, a callable that matches the method signature of
         httplib2.Http.request, used to make the revoke request.
     """
-    self._do_revoke(http_request, self.refresh_token)
+    self._do_revoke(http_request, self.refresh_token or self.access_token)
 
   def _do_revoke(self, http_request, token):
-    """Revokes the credentials and deletes the store if available.
+    """Revokes this credential and deletes the stored copy (if it exists).
 
     Args:
       http_request: callable, a callable that matches the method signature of
@@ -971,7 +975,7 @@ def _get_environment(urlopen=None):
     SETTINGS.env_name = 'GAE_PRODUCTION'
   elif server_software.startswith('Development/'):
     SETTINGS.env_name = 'GAE_LOCAL'
-  elif _detect_gce_environment(urlopen=urlopen):
+  elif NO_GCE_CHECK != 'True' and _detect_gce_environment(urlopen=urlopen):
     SETTINGS.env_name = 'GCE_PRODUCTION'
 
   return SETTINGS.env_name
